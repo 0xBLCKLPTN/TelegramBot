@@ -1,8 +1,4 @@
-import asyncio
-from utils.dataspace import create_database
+from db import db
+from models.models import Admins, Users
 
-
-def test_base():
-    session = create_database()
-
-test_base()
+session = db.create_database()
