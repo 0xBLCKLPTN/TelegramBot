@@ -3,7 +3,6 @@ from models.models import Admins, Users
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 
-
 session = db.create_database()
 
 class ManageAdmins:
