@@ -29,4 +29,4 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Coverage 
-      run: python3 -m coverage run -m unittest tests.py && python3 -m coverage report
+      run: python3 -m coverage run -m unittest src/tests.py && python3 -m coverage report
