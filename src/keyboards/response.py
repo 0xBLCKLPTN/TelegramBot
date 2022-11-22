@@ -7,40 +7,48 @@ from keyboards.start_menu import *
 async def process_start_command(message: types.Message):
     await message.reply("hui", reply_markup=start_kb)
 
-@dp.message(Text(text="Регистарция"))
+@dp.message_handler(text="Регистарция")
 async def description(message: types.Message):
-    await message.reply("Текст описания")
+    await message.reply("Текст описания", reply_markup=main_kb)
 
-@dp.message(Text(text="Расценки"))
+@dp.message_handler(text="Расценки")
 async def description(message: types.Message):
     await message.reply("Текст расценок", reply_markup=return_kb)
+
+@dp.message_handler(text="Описание")
+async def description(message: types.Message):
+    await message.reply("Текст описания", reply_markup=return_kb)
     
 
 
-@dp.message(Text(text="Оплата"))
+@dp.message_handler(text="Оплата")
 async def description(message: types.Message):
     await message.reply("Текст описания", reply_markup=return_kb)
 
-@dp.message(Text(text="Инструкция по настройке"))
+@dp.message_handler(text="Инструкция по настройке")
 async def description(message: types.Message):
     await message.reply("Текст Инструкции", reply_markup=return_kb)
 
-@dp.message(Text(text="Загрузить cookies"))
+@dp.message_handler(text="Загрузить cookies")
 async def description(message: types.Message):
     await message.reply("Вам необходимо загрузить документ формата .json, как его получить можете посмотреть в предыдущем меню, нажав на кнопку инструкция", reply_markup=return_kb)
 
-@dp.message(Text(text="Загрузить id company"))
+@dp.message_handler(text="Загрузить id company")
 async def description(message: types.Message):
     await message.reply("Вам необходимо прислать company id, как его получить можете посмотреть в предыдущем меню, нажав на кнопку инструкция", reply_markup=return_kb)
 
-@dp.message(Text(text="Загрузить рекомендации к товарам"))
+@dp.message_handler(text="Загрузить рекомендации к товарам")
 async def description(message: types.Message):
-    await message.reply("Текст Инструкции", reply_markup=return_kb)
+    await message.reply("Вам необходимо прислать файл «рекомендации к товарам» в формате .xlsx, как сформировать такой файл можете посмотреть в предыдущем меню, нажав на кнопку инструкция", reply_markup=return_kb)
 
-@dp.message(Text(text="Загрузить список товаров"))
+@dp.message_handler(text="Загрузить список товаров")
 async def description(message: types.Message):
-    await message.reply("Текст Инструкции", reply_markup=return_kb)
+    await message.reply("Вам необходимо прислать файл «список товаров» в формате .xlsx, как сформировать такой файл можете посмотреть в предыдущем меню, нажав на кнопку инструкция", reply_markup=return_kb)
 
-@dp.message(Text(text="Вопросы и пожелания"))
+@dp.message_handler(text="Вопросы и пожелания")
 async def description(message: types.Message):
-    await message.reply("Текст Инструкции", reply_markup=return_kb)
+    await message.reply("Вы можете написать свой вопрос или пожелание по работе бота, мы постараемся ответит Вам в ближайшее время", reply_markup=return_kb)
+
+@dp.message_handler(text="Вернуться")
+async def description(message: types.Message):
+    await message.answer("Привет!",reply_markup=return_kb)
