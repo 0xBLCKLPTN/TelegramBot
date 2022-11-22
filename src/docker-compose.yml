@@ -1,0 +1,23 @@
+version: '3.6'
+
+services:
+  db:
+    image: postgres:14.5
+    restart: always
+    environment:
+      POSTGRES_DB: 'testbase'
+      POSTGRES_USER: 'hero'
+      POSTGRES_PASSWORD: 'hero'
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    image: chorss/docker-pgadmin4
+    ports:
+      - 5050:5050
+
+volumes:
+  db:
+    driver: local
+  pgadmin-data:
+    
