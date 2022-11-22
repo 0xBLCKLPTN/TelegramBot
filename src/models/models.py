@@ -27,6 +27,11 @@ class Users(Base):
     phone_number = Column(String)
     email = Column(String)
 
+    cookies_file = Column(String, default= None)
+    company_id = Column(Integer, default = None)
+    recomendations_file = Column(String, default = None)
+    list_of_products_file = Column(String, default = None)
+
     company_name = Column(String)
     revenue = Column(Integer)
     added = Column(DateTime, default = datetime.utcnow)

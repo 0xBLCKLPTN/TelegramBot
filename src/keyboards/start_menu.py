@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 button_reg = KeyboardButton("Регистарция")
 button_price = KeyboardButton("Расценки")

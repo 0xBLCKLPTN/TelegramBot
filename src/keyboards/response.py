@@ -15,8 +15,6 @@ async def description(message: types.Message):
 async def description(message: types.Message):
     await message.reply("Текст расценок", reply_markup=return_kb)
     
-
-
 @dp.message(Text(text="Оплата"))
 async def description(message: types.Message):
     await message.reply("Текст описания", reply_markup=return_kb)
