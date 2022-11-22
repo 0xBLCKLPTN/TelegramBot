@@ -8,8 +8,9 @@ class ManageAdmins:
     def remove_admin(self):
         pass
 
-    def add_admin(self):
-        pass
+    def add_admin(self, user: Admins):
+        session.add(user)
+        session.commit()
 
     def check_admin(self, user_id) -> bool:
         try:
@@ -22,14 +23,28 @@ class ManageAdmins:
 
 class ManageUsers:
     def add_user(self, user: Users):
-        pass
+        session.add(user)
+        session.commit()
 
     def check_user(self, user_id: int) -> bool:
         try:
             record = session.query(Users).filter(Users.user_id == user_id).one()
+            record.execute()
             return True
         except NoResultFound:
             return False
 
+    def get_user(self, user_id: int) -> bool:
+        try:
+            record = session.query(Users).filter(Users.user_id == user_id).one()
+            print(record)
+            return record
+        except NoResultFound as ex:
+            return False
+
+    def new_pay(self, user_id: int):
+        user = self.get_user(user_id)
+        if user != False:
+            print(user.username)
 
 

@@ -1,11 +1,7 @@
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor
-
+from aiogram import types
+from dispatcher import *
 from keyboards.start_menu import *
 
-bot = Bot(token="5843120216:AAEKuj9NkCahZM5Mu1-lQDoBfQ7lGXkEeJk")
-dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):

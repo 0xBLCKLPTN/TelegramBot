@@ -9,6 +9,7 @@ class Admins(Base):
 
     id = Column(Integer, primary_key=True)
     username = Column(String)
+    user_id = Column(String)
     created = Column(DateTime, default=datetime.utcnow)
 
 
@@ -29,5 +30,5 @@ class Users(Base):
     company_name = Column(String)
     revenue = Column(Integer)
     added = Column(DateTime, default = datetime.utcnow)
-    last_buy = Column(DateTime, default = 'None')
+    last_buy = Column(DateTime, default = None)
 

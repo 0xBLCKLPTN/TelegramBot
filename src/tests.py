@@ -1,8 +1,6 @@
-#from db import db
-#from models.models import Admins, Users
 import unittest
 from utils import validator
-#session = db.create_database()
+from utils import dataspace
 
 class TestValidator(unittest.TestCase):
     def test_name(self):
@@ -12,3 +10,8 @@ class TestValidator(unittest.TestCase):
     def test_email(self):
         email = 'blcklptn@gmail.com'
         self.assertEqual(validator.check_email(email), True)
+
+    def test_revenue(self):
+        revenue = '123'
+        self.assertEqual(validator.check_revenue(revenue), False)
+
