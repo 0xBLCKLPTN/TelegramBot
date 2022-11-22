@@ -11,6 +11,15 @@ class ManageAdmins:
     def add_admin(self):
         pass
 
+    def check_admin(self, user_id) -> bool:
+        try:
+            record = session.query(Admins).filter(Admins.user_id == user_id).one()
+            return True
+
+        except NoResultFound:
+            return False
+
+
 class ManageUsers:
     def add_user(self, user: Users):
         pass
@@ -23,6 +32,4 @@ class ManageUsers:
             return False
 
 
-k = ManageUsers().check_user('123')
-print(k)
 
