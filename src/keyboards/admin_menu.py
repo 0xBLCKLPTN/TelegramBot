@@ -8,3 +8,13 @@ start_bot = KeyboardButton('Запуск бота')
 stop_bot = KeyboardButton('Остановка бота')
 
 admin_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(circle_settings, admin_settings, subscriber_settings, start_bot, stop_bot)
+
+button_return = KeyboardButton("Назад")
+
+back_kb = ReplyKeyboardMarkup(resize_keyboard=True).add(button_return)
+
+admin_add = KeyboardButton('Добавить администратора')
+admin_remove = KeyboardButton('Удалить администратора')
+
+admin_settings_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(admin_add, admin_remove, button_return)
+

@@ -1,9 +1,9 @@
 from dispatcher import dp, bot
 from aiogram import types
-from aiogram.dispatcher.filters import Text
 from keyboards.start_menu import *
 from aiogram.dispatcher import FSMContext 
 from keyboards.states import *
+<<<<<<< Updated upstream
 from utils import validator
 from core.config import settings
 from keyboards.load_files import *
@@ -11,6 +11,32 @@ from keyboards.load_files import *
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
     await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
+=======
+from utils.dataspace import *
+from keyboards.admin_menu import *
+from models.models import *
+
+@dp.message_handler(commands=["start"])
+async def process_start_command(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        await message.reply("admin", reply_markup=admin_keyboard)
+    else:
+        await message.reply("hui", reply_markup=start_kb)
+
+"""
+@dp.message_handler(commands=["add"])
+async def process_start_command(message: types.Message):
+    admin = Admins(
+    username = message.from_user.full_name,
+    user_id = message.from_user.id
+)
+    ManageAdmins().add_admin(admin)
+"""
+
+#############################
+
+#############################
+>>>>>>> Stashed changes
 
 @dp.message_handler(text="Расценки", state='unreg')
 async def description(message: types.Message):
