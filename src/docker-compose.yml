@@ -5,16 +5,18 @@ services:
     image: postgres:14.5
     restart: always
     environment:
-      POSTGRES_DB: 'testbase'
-      POSTGRES_USER: 'hero'
-      POSTGRES_PASSWORD: 'hero'
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - '5432:5432'
+      - ${DB_PORT}
 
   pgadmin:
     image: chorss/docker-pgadmin4
     ports:
-      - 5050:5050
+      - ${PG_PORT}
+
+
 
 
 volumes:

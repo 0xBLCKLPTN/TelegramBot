@@ -14,4 +14,3 @@ class TestValidator(unittest.TestCase):
     def test_revenue(self):
         revenue = '123'
         self.assertEqual(validator.check_revenue(revenue), False)
-
