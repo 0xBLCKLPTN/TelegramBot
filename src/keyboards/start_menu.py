@@ -1,6 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-button_reg = KeyboardButton("Регистарция")
+button_reg = KeyboardButton("Регистрация")
 button_price = KeyboardButton("Расценки")
 button_description = KeyboardButton("Описание")
 
