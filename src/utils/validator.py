@@ -31,3 +31,4 @@ async def file_extension(file_name: str) -> str:
         return 'json'
     return 'unknown'
 
+

@@ -6,8 +6,9 @@ from datetime import datetime
 session = db.create_database()
 
 class ManageAdmins:
-    def remove_admin(self):
-        pass
+    def remove_admin(self, user_id: int):
+        session.query(Admins).filter(Admins.user_id == user_id).one().delete()
+        session.commit()
 
     def add_admin(self, user: Admins):
         session.add(user)
@@ -20,6 +21,10 @@ class ManageAdmins:
 
         except NoResultFound:
             return False
+    
+    def get_all_admins(self) -> list:
+        record = session.query(Admins).all()
+        return record
 
 
 class ManageUsers:
