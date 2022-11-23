@@ -4,6 +4,8 @@ from dispatcher import dp
 from keyboards.states import *
 from aiogram.dispatcher import FSMContext 
 from aiogram import types
+from core.config import *
+import core.config
 
 @dp.message_handler(text="Настройка списка администраторов")
 async def process_admin_list(message: types.Message):
@@ -42,6 +44,19 @@ async def process_admin_delete(message: types.Message, state: FSMContext):
         ManageAdmins().remove_admin(user_id=message.text.title())
         await state.finish()
         await message.reply("Администратор удалён", reply_markup = admin_settings_keyboard)
+
+@dp.message_handler(text="Запуск бота")
+async def process_admin_delete(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        core.config.Bot_on = True
+        print(core.config.Bot_on)
+        await message.reply("Бот запущен", reply_markup = admin_keyboard)
+
+@dp.message_handler(text="Остановка бота")
+async def process_admin_delete(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        core.config.Bot_on = False
+        await message.reply("Бот остановлен", reply_markup = admin_keyboard)
 
 @dp.message_handler(text="Назад")
 async def process_admin_delete(message: types.Message):
