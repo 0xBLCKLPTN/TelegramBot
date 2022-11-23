@@ -1,6 +1,5 @@
 import unittest
 from utils import validator
-from utils import dataspace
 
 class TestValidator(unittest.TestCase):
     def test_name(self):

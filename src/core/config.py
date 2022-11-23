@@ -11,6 +11,6 @@ class Settings(BaseSettings):
     DB_HOST: str
 
     BOT_TOKEN: str
-    
+    DATA_STORAGE: str
 
 settings = Settings()

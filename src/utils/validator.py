@@ -11,15 +11,13 @@ async def check_email(email: str) -> bool:
 async def check_name(name: str) -> bool:
     if len(name.split(' ')) == 3:
         return True
-    else:
-        return False
+    return False
 
 
 async def check_revenue(revenue) -> bool:
     if isinstance(revenue, int):
         return True
-    else:
-        return False
+    return False
 
 async def file_extension(file_name: str) -> str:
     extension = file_name.split('.')[-1]
