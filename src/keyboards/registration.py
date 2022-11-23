@@ -1,5 +1,8 @@
 from keyboards.response import *
 from utils import validator
+from utils import dataspace
+from models.models import Users
+from keyboards.start_menu import *
 
 
 @dp.message_handler(text="Регистрация", state="*")
@@ -45,17 +48,31 @@ async def fname_step(message: types.Message, state: FSMContext):
     await Registration.revueu.set()
 
 
-
-
 @dp.message_handler(state=Registration.revueu, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
     revueu = message.text.title()
-    if validator.check_revenue(revueu):
+    if await validator.check_revenue(revueu):
         await state.update_data(revueu=message.text.title())
-        await message.answer(text='Готово!')
+        await message.answer(text='Готово!', reply_markup=main_kb)
         await Registration.revueu.set()
         user_data = await state.get_data()
         await state.finish()
-        print(user_data)
+        
+        name_list = user_data['username'].split(' ')
+        user = Users(
+            FirstName = name_list[1],
+            MiddleName = name_list[2],
+            LastName = name_list[0],
+
+            username = message.from_user.username,
+            user_id = message.from_user.id,
+            phone_number = user_data['phone'],
+            email = user_data['email'],
+
+            company_name = user_data['cname'],
+            revenue = user_data['revueu']
+        )
+        dataspace.ManageUsers().add_user(user)
+        
     else:
         await message.reply('Введите число')

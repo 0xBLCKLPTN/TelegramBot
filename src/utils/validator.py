@@ -15,12 +15,15 @@ async def check_name(name: str) -> bool:
 
 
 async def check_revenue(revenue) -> bool:
-    if isinstance(revenue, int):
+    try:
+        revenue = int(revenue)
         return True
-    return False
+    except:
+        return False
 
 async def file_extension(file_name: str) -> str:
     extension = file_name.split('.')[-1]
+    print(extension)
     if extension == '.xlsx':
         return 'excel'
     elif extension == '.xls':

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from db.db import Base
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 
 
 class Admins(Base):
@@ -33,7 +33,7 @@ class Users(Base):
     list_of_products_file = Column(String, default = None)
 
     company_name = Column(String)
-    revenue = Column(Integer)
+    revenue = Column(BigInteger)
     added = Column(DateTime, default = datetime.utcnow)
     last_buy = Column(DateTime, default = None)
 

@@ -23,5 +23,5 @@ user = Users(
 )
 
 
-dataspace.ManageUsers().add_user(user)
-dataspace.ManageUsers().new_pay(123)
+#dataspace.ManageUsers().add_user(user)
+#dataspace.ManageAdmins().check_admin('123')

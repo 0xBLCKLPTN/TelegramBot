@@ -51,4 +51,30 @@ class ManageUsers:
         session.query(Users).filter(Users.user_id == user_id).update({'last_buy': datetime.utcnow() })
         session.commit()
 
+    def load_cookies(self, user_id: int, dest):
+        try:
+            session.query(Users).filter(Users.user_id == user_id).update({'cookies_file': dest})
+            session.commit()
+        except:
+            pass
 
+    def load_recomendations(self, user_id: int, dest):
+        try:
+            session.query(Users).filter(Users.user_id == user_id).update({'recomendations_file': dest})
+            session.commit()
+        except:
+            pass
+    
+    def load_list_of_products(self, user_id: int, dest):
+        try:
+            session.query(Users).filter(Users.user_id == user_id).update({'list_of_products_file': dest})
+            session.commit()
+        except:
+            pass
+    
+    def load_cid(self, user_id, cid):
+        try:
+            session.query(Users).filter(Users.user_id == user_id).update({'company_id': cid})
+            session.commit()
+        except:
+            pass

@@ -12,5 +12,7 @@ class Settings(BaseSettings):
 
     BOT_TOKEN: str
     DATA_STORAGE: str
+    INSTRUCTIONS_FILE: str
+    PAYMENT_TOKEN: str
 
 settings = Settings()
