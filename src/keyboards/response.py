@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Text
 from keyboards.start_menu import *
 from aiogram.dispatcher import FSMContext 
 from keyboards.states import *
-
+from utils import validator
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
     await message.reply("hui", reply_markup=start_kb)
@@ -18,9 +18,13 @@ async def name_step(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Registration.uname, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
-    await state.update_data(username=message.text.title())
-    await message.answer(text='Введите номер телефона:')
-    await Registration.phone.set()
+    username = message.text.title()
+    if await validator.check_name(username):
+        await state.update_data(username=username)
+        await message.answer(text='Введите номер телефона:')
+        await Registration.phone.set()
+    else:
+        await message.reply('Неправильное ФИО, проверьте еще раз')
 
 
 @dp.message_handler(state=Registration.phone, content_types=types.ContentTypes.TEXT)
@@ -32,21 +36,28 @@ async def age_step(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Registration.email, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
-    await state.update_data(email=message.text.title())
-    await message.answer(text='Введите наименование компании:')
-    await Registration.cname.set()
+    email = message.text.title()
+    if await validator.check_email(email):
+        await state.update_data(email=message.text.title())
+        await message.answer(text='Введите наименование компании:')
+        await Registration.cname.set()
+    else:
+        await message.reply('Неправильный формат электронной почты. Попробуйте еще раз')
 
 
 @dp.message_handler(state=Registration.cname, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
-    await state.update_data(cname=message.text.title())
-    await message.answer(text='Введите выручку компании:')
-    await Registration.revueu.set()
+    revueu = message.text.title()
+    if validator.check_revenue(revueu):
+        await message.answer(text='Введите выручку компании:')
+        await Registration.revueu.set()
+    else:
+        await message.reply('Введите число')
 
 @dp.message_handler(state=Registration.revueu, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
     await state.update_data(revueu=message.text.title())
-    await message.answer(text='Готово!')
+    await message.answer(text='Поздравляем с успешной регистрацией!')
     await Registration.revueu.set()
     user_data = await state.get_data()
     await state.finish()
