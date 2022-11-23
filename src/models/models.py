@@ -8,7 +8,7 @@ class Admins(Base):
     __tablename__ = 'Admins'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String)
+    username = Column(String, default= None)
     user_id = Column(String)
     created = Column(DateTime, default=datetime.utcnow)
 

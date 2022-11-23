@@ -7,12 +7,19 @@ session = db.create_database()
 
 class ManageAdmins:
     def remove_admin(self, user_id: int):
-        session.query(Admins).filter(Admins.user_id == user_id).one().delete()
-        session.commit()
+        try:
+            asd = session.query(Admins).filter(Admins.user_id == user_id).one()
+            session.delete(asd)
+            session.commit()
+        except:
+            pass
 
     def add_admin(self, user: Admins):
-        session.add(user)
-        session.commit()
+        try:
+            session.add(user)
+            session.commit()
+        except:
+            pass
 
     def check_admin(self, user_id) -> bool:
         try:

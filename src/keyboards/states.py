@@ -14,3 +14,9 @@ class LoadFiles(StatesGroup):
     excel_file = State()
     recs_file = State()
     cid = State()
+
+class AdminDelete(StatesGroup):
+    id = State()
+
+class AdminAdd(StatesGroup):
+    id = State()
