@@ -15,7 +15,10 @@ async def process_start_command(message: types.Message):
         await message.reply("admin", reply_markup=admin_keyboard)
     else:
         if core.config.Bot_on:
-            await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
+            if  ManageUsers().check_user(message.from_user.id):
+                await message.reply("Привет!", reply_markup=main_kb)
+            else: 
+                await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
 
 """@dp.message_handler(commands=["add"])
 async def process_start_command(message: types.Message):

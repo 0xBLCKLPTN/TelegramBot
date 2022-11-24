@@ -42,7 +42,7 @@ class ManageUsers:
     def check_user(self, user_id: int) -> bool:
         try:
             record = session.query(Users).filter(Users.user_id == user_id).one()
-            record.execute()
+            #record.execute()
             return True
         except NoResultFound:
             return False
