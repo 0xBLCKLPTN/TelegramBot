@@ -9,6 +9,7 @@ from utils import validator
 import core.config
 from keyboards.load_files import *
 
+
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
@@ -46,17 +47,29 @@ async def description(message: types.Message):
             title='welcome',
             description='simple description',
             provider_token=settings.PAYMENT_TOKEN,
-            currency='rub',
+            currency='RUB',
             #photo_url=TIME_MACHINE_IMAGE_URL,
             #photo_height=512,  # !=0/None, иначе изображение не покажется
             #photo_width=512,
             #photo_size=512,
             is_flexible=False,  # True если конечная цена зависит от способа доставки
             prices=[PRICE],
-            start_parameter='time-machine-example',
-            payload='some-invoice-payload-for-our-internal-use'
+            start_parameter='callback_query',
+            payload='callback_query'
 )
 
+
+
+
+@dp.pre_checkout_query_handler()
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
+
+@dp.message_handler(content_types=types.ContentType.SUCCESSFUL_PAYMENT)
+async def process_pay(message: types.Message):
+    if message.successful_payment.invoice_payload == "callback_query":
+        dataspace.ManageUsers().new_pay(message.from_user.id)
+        await message.reply('Ты успешно подписан!')
 
 
 @dp.message_handler(text="Инструкция по настройке", state='*')

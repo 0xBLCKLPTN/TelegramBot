@@ -54,7 +54,7 @@ class ManageUsers:
         except NoResultFound as ex:
             return False
 
-    def new_pay(self, user_id: int):
+    def new_pay(self, user_id: str):
         session.query(Users).filter(Users.user_id == user_id).update({'last_buy': datetime.utcnow() })
         session.commit()
 

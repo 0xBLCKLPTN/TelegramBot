@@ -15,5 +15,6 @@ class Settings(BaseSettings):
     INSTRUCTIONS_FILE: str
     PAYMENT_TOKEN: str
 
-Bot_on = False
+Bot_on = True
+START_LOOP = 0
 settings = Settings()

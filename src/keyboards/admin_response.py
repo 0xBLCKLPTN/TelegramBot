@@ -62,3 +62,15 @@ async def process_admin_delete(message: types.Message):
 async def process_admin_delete(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
         await message.reply("admin", reply_markup = admin_keyboard)
+
+
+@dp.message_handler(text="Настройка цикла запуска")
+async def process_admin_delete(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        await message.reply('Введите цикл в минутаз')
+
+
+@dp.message_handler(text="Настройка цикла подписки")
+async def process_admin_delete(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        await message.reply('Введите цикл в днях')
