@@ -20,3 +20,14 @@ class AdminDelete(StatesGroup):
 
 class AdminAdd(StatesGroup):
     id = State()
+
+
+class SubTime(StatesGroup):
+    get_sub_from_user = State()
+
+class StartBot(StatesGroup):
+    start = State()
+
+class Payment(StatesGroup):
+    qw = State()
+    InputUserData = State()

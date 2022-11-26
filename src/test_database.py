@@ -1,7 +1,6 @@
 from utils import dataspace
 from models.models import Admins, Users
 from utils.validator import check_email, check_name, check_revenue
-import asyncio
 
 admin = Admins(
     username = 'blcklptn',
@@ -25,3 +24,4 @@ user = Users(
 
 #dataspace.ManageUsers().add_user(user)
 #dataspace.ManageAdmins().check_admin('123')
+dataspace.ManageUsers().get_all_payers()

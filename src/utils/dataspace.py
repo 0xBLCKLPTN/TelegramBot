@@ -1,8 +1,8 @@
 from db import db
 from models.models import Admins, Users
 from sqlalchemy.exc import NoResultFound
-from datetime import datetime
-
+from datetime import datetime, timedelta
+from core import config
 session = db.create_database()
 
 class ManageAdmins:
@@ -42,7 +42,7 @@ class ManageUsers:
     def check_user(self, user_id: int) -> bool:
         try:
             record = session.query(Users).filter(Users.user_id == user_id).one()
-            record.execute()
+            #record.execute()
             return True
         except NoResultFound:
             return False
@@ -55,7 +55,8 @@ class ManageUsers:
             return False
 
     def new_pay(self, user_id: str):
-        session.query(Users).filter(Users.user_id == user_id).update({'last_buy': datetime.utcnow() })
+        dt = datetime.utcnow() + timedelta(seconds=config.START_LOOP)
+        session.query(Users).filter(Users.user_id == user_id).update({'last_buy': dt})
         session.commit()
 
     def load_cookies(self, user_id: int, dest):
@@ -72,16 +73,37 @@ class ManageUsers:
         except:
             pass
     
-    def load_list_of_products(self, user_id: int, dest):
+    def load_list_of_products(self, user_id: str, dest):
+        # Загрузить файл списка продуктов
         try:
             session.query(Users).filter(Users.user_id == user_id).update({'list_of_products_file': dest})
             session.commit()
         except:
             pass
     
-    def load_cid(self, user_id, cid):
+    def load_cid(self, user_id: str, cid: str):
+        # Обновить company_id у пользователя с user_id
         try:
             session.query(Users).filter(Users.user_id == user_id).update({'company_id': cid})
             session.commit()
         except:
             pass
+    
+    def get_all_payers(self) -> None:
+        # Получить всех пользователей у которых есть подписка
+        try:
+            record = session.query(Users).filter(Users.last_buy != None).all()
+            return record
+        except:
+            pass
+    
+
+    
+    def set_sub_end(self, user_id: str) -> None:
+        # Если заходите поставить last_buy пользователя, у которого законичилась подписка на None.
+        try:
+            session.query(Users).filter(Users.user_id == user_id).update({'last_buy': None })
+            session.commit()
+        except:
+            pass
+

@@ -16,7 +16,10 @@ async def process_start_command(message: types.Message):
         await message.reply("admin", reply_markup=admin_keyboard)
     else:
         if core.config.Bot_on:
-            await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
+            if  ManageUsers().check_user(message.from_user.id):
+                await message.reply("Привет!", reply_markup=main_kb)
+            else: 
+                await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
 
 """@dp.message_handler(commands=["add"])
 async def process_start_command(message: types.Message):
@@ -25,51 +28,47 @@ async def process_start_command(message: types.Message):
 )
     ManageAdmins().add_admin(admin)"""
 
-@dp.message_handler(text="Расценки", state='unreg')
+@dp.message_handler(text="Расценки", state="*")
 async def description(message: types.Message):
     if core.config.Bot_on:
         await message.reply("Текст расценок", reply_markup=return_kb)
 
-@dp.message_handler(text="Описание", state='unreg')
+@dp.message_handler(text="Описание", state='*')
 async def description(message: types.Message):
     if core.config.Bot_on:
         await message.reply("Текст описания", reply_markup=return_kb)
     
 
-PRICE = types.LabeledPrice(label='Настоящая Машина Времени', amount=4200000)
 
-@dp.message_handler(text="Оплата", state='*')
-async def description(message: types.Message):
+@dp.message_handler(text="Оплата", state="*")
+async def set_pay(message: types.Message, state: FSMContext):
     if core.config.Bot_on:
-        await message.reply("Текст описания", reply_markup=return_kb)
-        await bot.send_invoice(
-            message.chat.id,
-            title='welcome',
-            description='simple description',
-            provider_token=settings.PAYMENT_TOKEN,
-            currency='RUB',
-            #photo_url=TIME_MACHINE_IMAGE_URL,
-            #photo_height=512,  # !=0/None, иначе изображение не покажется
-            #photo_width=512,
-            #photo_size=512,
-            is_flexible=False,  # True если конечная цена зависит от способа доставки
-            prices=[PRICE],
-            start_parameter='callback_query',
-            payload='callback_query'
-)
+        await message.answer(f'Чтобы оплатить подписку, отправьте {settings.PRICE} на {settings.CARD_NUMBER} и отправьте скриншот!', reply_markup=return_kb)
+        await Payment.qw.set()
 
+@dp.message_handler(state=Payment.qw, content_types=['photo'])
+async def fname_step(message: types.Message, state: FSMContext):
+    if core.config.Bot_on:
+        user_id = str(message.from_user.id)
 
+        file = await bot.get_file(message.photo[-1].file_id)
+        file_path = file.file_path
+        print(file_path)
+        destination = settings.DATA_STORAGE + 'to_admins' + "/" + user_id + '.png'
+        await bot.download_file(file_path, destination)
+        await message.reply('Оплата проверяется администраторами!', reply_markup=main_kb)
+        photo = types.input_file.InputFile(destination)
+        await bot.send_photo(dataspace.ManageAdmins().get_all_admins()[0].user_id, photo=photo, caption=f' {user_id}', reply_markup=inline_kb1)
+        await state.finish()
 
-
-@dp.pre_checkout_query_handler()
-async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
-
-@dp.message_handler(content_types=types.ContentType.SUCCESSFUL_PAYMENT)
-async def process_pay(message: types.Message):
-    if message.successful_payment.invoice_payload == "callback_query":
-        dataspace.ManageUsers().new_pay(message.from_user.id)
-        await message.reply('Ты успешно подписан!')
+@dp.callback_query_handler(lambda c: c.data == 'button1')
+async def process_callback_button1(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, 'Оплата подтверждена')
+    capt = callback_query.message.caption
+    await bot.send_message(capt, "Администратор подтвердил подписку!")
+    dataspace.ManageUsers().new_pay(capt)
+        
 
 
 @dp.message_handler(text="Инструкция по настройке", state='*')

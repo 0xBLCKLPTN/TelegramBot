@@ -28,17 +28,21 @@ async def fname_step(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Registration.phone, content_types=types.ContentTypes.TEXT)
 async def age_step(message: types.Message, state: FSMContext):
     if core.config.Bot_on:
-        await state.update_data(phone=message.text.title())
-        await message.answer(text='Введите ваш Email:')
-        await Registration.email.set()
+        number = message.text
+        if await validator.check_revenue(number):
+            await state.update_data(phone=message.text)
+            await message.answer(text='Введите ваш Email:')
+            await Registration.email.set()
+        else:
+            await message.reply('Введите число')
 
 
 @dp.message_handler(state=Registration.email, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
     if core.config.Bot_on:
-        email = message.text.title()
+        email = message.text
         if await validator.check_email(email):
-            await state.update_data(email=message.text.title())
+            await state.update_data(email=message.text)
             await message.answer(text='Введите наименование компании:')
             await Registration.cname.set()
         else:
@@ -48,7 +52,7 @@ async def fname_step(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Registration.cname, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
     if core.config.Bot_on:
-        await state.update_data(cname=message.text.title())
+        await state.update_data(cname=message.text)
         await message.answer(text='Введите выручку компании:')
         await Registration.revueu.set()
 
@@ -56,9 +60,9 @@ async def fname_step(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Registration.revueu, content_types=types.ContentTypes.TEXT)
 async def fname_step(message: types.Message, state: FSMContext):
     if core.config.Bot_on:
-        revueu = message.text.title()
+        revueu = message.text
         if await validator.check_revenue(revueu):
-            await state.update_data(revueu=message.text.title())
+            await state.update_data(revueu=message.text)
             await message.answer(text='Готово!', reply_markup=main_kb)
             await Registration.revueu.set()
             user_data = await state.get_data()

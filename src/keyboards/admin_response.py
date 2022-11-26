@@ -4,8 +4,9 @@ from dispatcher import dp
 from keyboards.states import *
 from aiogram.dispatcher import FSMContext 
 from aiogram import types
+
 from core.config import *
-import core.config
+from core import config
 
 @dp.message_handler(text="Настройка списка администраторов")
 async def process_admin_list(message: types.Message):
@@ -48,14 +49,14 @@ async def process_admin_delete(message: types.Message, state: FSMContext):
 @dp.message_handler(text="Запуск бота")
 async def process_admin_delete(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
-        core.config.Bot_on = True
-        print(core.config.Bot_on)
+        config.Bot_on = True
+        print(config.Bot_on)
         await message.reply("Бот запущен", reply_markup = admin_keyboard)
 
 @dp.message_handler(text="Остановка бота")
 async def process_admin_delete(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
-        core.config.Bot_on = False
+        config.Bot_on = False
         await message.reply("Бот остановлен", reply_markup = admin_keyboard)
 
 @dp.message_handler(text="Назад")
@@ -68,9 +69,29 @@ async def process_admin_delete(message: types.Message):
 async def process_admin_delete(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
         await message.reply('Введите цикл в минутаз')
+        await StartBot.start.set()
+        
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state=StartBot.start)
+async def some_func(message: types.Message, state: FSMContext):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        config.START_BOT = (((int(message.text) *60) ))
+        await message.reply(f'Цикл запуска установлен на: {str(config.START_BOT / 60)} минут')
+        await state.finish()
 
-
-@dp.message_handler(text="Настройка цикла подписки")
-async def process_admin_delete(message: types.Message):
+@dp.message_handler(text="Настройка цикла подписки", state="*")
+async def process_admin_delete(message: types.Message, state: FSMContext):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
         await message.reply('Введите цикл в днях')
+        await SubTime.get_sub_from_user.set()
+
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state=SubTime.get_sub_from_user)
+async def some_func(message: types.Message, state: FSMContext):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        config.START_LOOP = (((int(message.text) * 24) * 60) * 60)
+        await message.reply(f'Цикл подписки установлен до: {str(int(((config.START_LOOP / 60)/60) / 24 ))} дней')
+        await state.finish()
+
+@dp.message_handler(text="Настройка цикла запуска", state='*')
+async def process_admin_delete(message: types.Message):
+    if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
+        await message.reply('Возвращаемся!', reply_markup=button_return)

@@ -13,8 +13,11 @@ class Settings(BaseSettings):
     BOT_TOKEN: str
     DATA_STORAGE: str
     INSTRUCTIONS_FILE: str
-    PAYMENT_TOKEN: str
+    CARD_NUMBER: str
+    PRICE: str
 
 Bot_on = True
-START_LOOP = 0
+START_LOOP = 20 # настройка цикла подписки в секундах
+START_BOT = 0
+
 settings = Settings()
