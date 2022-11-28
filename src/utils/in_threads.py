@@ -12,8 +12,23 @@ class Subscriber:
             if payers != None:
                 for user in payers:
                     if user.last_buy > datetime.utcnow():
-                        pass # У пользователей еще не закончилась подписка
+                        pass # У пользователей еще не закончилась подписк
                     else:
+                        """
+                        из user можно вытащить все атрибуты, которые есть в models/models.py/Users:
+                        - user.username
+                        - user.user_id
+                        - user.FirstName
+                        - user.MiddleName
+                        - user.LastName
+                        - user.phone_number
+                        - user.email
+                        ...
+                        и так далее.
+                        полный список можно посмотреть в файле models.py и классе Users
+                        """
+
+                        #return user # user - это объект, который мы возвращаем 
                         print(user.last_buy, datetime.utcnow())
                         print(f"У пользователя {user.user_id} закончилась подписка")
                         dataspace.ManageUsers().set_sub_end(user.user_id)  # Устанавливаем подписку пользователя на None, тк она закончилась
