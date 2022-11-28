@@ -1,23 +1,35 @@
-from dotenv import load_dotenv
+"""
+config.py gets your configuration data from the environment.
+
+Written by: Daniil ( blcklptn ) Ermolaev.
+"""
+
+from dotenv import load_dotenv 
 from pydantic import BaseSettings
 
-load_dotenv()
+load_dotenv() # Initialize your env data.
 
 class Settings(BaseSettings):
-    DB_USERNAME: str
-    DB_NAME: str
-    DB_PASSWORD: str
-    DB_PORT: str
-    DB_HOST: str
+    '''
+    Base settings for programm.
 
-    BOT_TOKEN: str
-    DATA_STORAGE: str
-    INSTRUCTIONS_FILE: str
+    Args:
+        BaseSettings - pydantic object
+    '''
+    DB_USERNAME: str  # Username for database
+    DB_NAME: str  # Name of database
+    DB_PASSWORD: str  # Database password
+    DB_PORT: str  # Database port 5432 by default
+    DB_HOST: str  # Database host. localhost by default
+
+    BOT_TOKEN: str  # Telegram bot token
+    DATA_STORAGE: str  # Path to data_storage
+    INSTRUCTIONS_FILE: str  # Path to instructions
     CARD_NUMBER: str
     PRICE: str
 
-Bot_on = True
-START_LOOP = 20 # настройка цикла подписки в секундах
-START_BOT = 0
+Bot_on = True  # The bot is run by defaultю
+START_LOOP = 20  # Subscription duration
+START_BOT = 0  # Every n times bot will stop
 
-settings = Settings()
+settings = Settings()  # Initalizing this class object.

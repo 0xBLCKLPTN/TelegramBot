@@ -1,4 +1,11 @@
+"""
+admin_menu.py - keyboards for admins.
+
+Written by: Andrew ( Noimpass ) Averin.
+"""
+
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+
 
 circle_settings = KeyboardButton('Настройка цикла запуска')
 admin_settings = KeyboardButton('Настройка списка администраторов')
