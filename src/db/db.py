@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # URL to our database container
-SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}'  # noqa: E501, WPS326, WPS221
+SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@db:5432/{settings.DB_NAME}'  # noqa: E501, WPS326, WPS221
 
 # sqlalchemy engine
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
