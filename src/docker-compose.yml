@@ -19,27 +19,28 @@ services:
     ports:
       - ${PG_PORT}
   
-  #mybot:
-    #build:
-      #context: .
-      #dockerfile: Dockerfile
-    #env_file:
-      #- .env
-    #depends_on:
-      #- db
-    #links:
-      #- db
-    #volumes:
-      #- .:/src
+  mybot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - pgadmin
+    links:
+      - db
+    volumes:
+      - .:/src
 
 
-    #command: python3 start.py
+    command: python3 start.py
 
 
 volumes:
   db:
     driver: local
-  #app:
-    #driver: local
+  app:
+    driver: local
   pgadmin-data:
     

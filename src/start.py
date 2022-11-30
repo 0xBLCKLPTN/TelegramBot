@@ -1,3 +1,8 @@
+from time import sleep
+
+
+#sleep(20)
+
 from dispatcher import *
 from keyboards.response import *
 from keyboards.registration import *

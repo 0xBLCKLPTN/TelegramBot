@@ -3,6 +3,10 @@ from time import sleep
 from datetime import datetime, timedelta
 from core import config
 from utils import dataspace
+from utils.ozon import refactor_logic
+import asyncio
+
+rf_class = refactor_logic() # инициализация обьекта
 
 class Subscriber:
     def check(self):
@@ -12,7 +16,7 @@ class Subscriber:
             if payers != None:
                 for user in payers:
                     if user.last_buy > datetime.utcnow():
-                        pass # У пользователей еще не закончилась подписк
+                        asyncio.run(rf_class.get_new_reviews_bot(user.user_id))
                     else:
                         """
                         из user можно вытащить все атрибуты, которые есть в models/models.py/Users:
@@ -35,24 +39,13 @@ class Subscriber:
             sleep(1)
 
 
+
 class BotTime:
-    def __init__(self):
-        self.seconds = config.START_BOT
-        self.need_s = datetime.now() + timedelta(seconds=self.seconds)
     def check(self):
         while True:
+            sleep(config.START_BOT)
+            print('DONE!')
             
-            if self.seconds != config.START_BOT:
-                self.seconds = config.START_BOT
-                self.need_s = datetime.now() + timedelta(seconds=self.seconds)
-            
-            if datetime.now() >= self.need_s:
-                pass
-
-                self.need_s = datetime.now() + timedelta(seconds=self.seconds)
-            sleep(1)
-        
-
 
 def start_threads():
     sc = Subscriber()
