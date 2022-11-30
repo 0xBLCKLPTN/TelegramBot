@@ -6,4 +6,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the stack
-        run: cd src && docker-compose --env-file .env
+        run: cd src && docker-compose --env-file .env up
