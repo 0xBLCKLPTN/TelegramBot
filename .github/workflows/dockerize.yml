@@ -1,0 +1,22 @@
+name: Startup a bot.
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      
+    - name: Change Directory
+      run: src
+    
+    - name: Start Docker
+      run: docker-compose --env_file .env up
+    
