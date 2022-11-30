@@ -18,5 +18,5 @@ jobs:
       run: cd src
     
     - name: Start Docker
-      run: docker-compose --env_file .env up
+      run: docker-compose --env-file .env up
     
