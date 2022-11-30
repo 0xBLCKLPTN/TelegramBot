@@ -1,0 +1,18 @@
+name: Start Bot in docker-compose
+
+on:
+  push:
+    branches: [ master ]
+  
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enter Inside directory
+        run: cd src
+      
+      - name: Creating a docker-compose container and run bot
+        run: docker-compose --env-file .env
