@@ -51,7 +51,7 @@ async def parse_cookies(cookies) -> tuple:
 
 async def generate_headers(company_id: str, group_value: str, access_token: str,
                            refresh_token: str, user_id: str, cf_bm: str) -> dict:
-                           
+
     headers = {
         'authority': 'seller.ozon.ru',
         'accept': 'application/json, text/plain, */*',
@@ -73,3 +73,9 @@ async def generate_headers(company_id: str, group_value: str, access_token: str,
     }
 
     return headers
+
+
+async def find_cookies_file(user_id: str) -> str:
+    for file in os.listdir(settings.DATA_STORAGE + user_id):
+        if '.json' in file:
+            return settings.DATA_STORAGE + user_id + '/' + file

@@ -9,7 +9,6 @@ from utils import validator
 import core.config
 from keyboards.load_files import *
 
-
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
     if ManageAdmins().check_admin(user_id = str(message.from_user.id)):
@@ -21,12 +20,14 @@ async def process_start_command(message: types.Message):
             else: 
                 await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
 
-"""@dp.message_handler(commands=["add"])
+"""
+@dp.message_handler(commands=["add_admin"])
 async def process_start_command(message: types.Message):
     admin = Admins(
     user_id = message.from_user.id
 )
-    ManageAdmins().add_admin(admin)"""
+    ManageAdmins().add_admin(admin)
+"""
 
 @dp.message_handler(text="Расценки", state="*")
 async def description(message: types.Message):
@@ -37,7 +38,7 @@ async def description(message: types.Message):
 async def description(message: types.Message):
     if core.config.Bot_on:
         await message.reply("Текст описания", reply_markup=return_kb)
-    
+
 
 
 @dp.message_handler(text="Оплата", state="*")

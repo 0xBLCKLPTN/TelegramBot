@@ -1,14 +1,13 @@
-import http.client, random
 from models.reply_models import Review, Product
-from time import sleep
-from utils.other_utils import generate_headers, parse_cookies
-from core.config import settings
-import json
+from utils.other_utils import parse_cookies, generate_headers
 import aiohttp
 import asyncio
+import random
+import json
+from dispatcher import bot
 
 
-async def pagination(startup_data, pagination_last_timestamp = 0, pagination_last_uuid = None):
+async def pagination(startup_data, user_id: str,pagination_last_timestamp = 0, pagination_last_uuid = None):
     url = 'https://seller.ozon.ru/api/v3/review/list'
     payload = json.dumps({
         "filter": {
@@ -37,35 +36,35 @@ async def pagination(startup_data, pagination_last_timestamp = 0, pagination_las
             return reviews, pagination_last_timestamp, pagination_last_uuid
 
         else:
-            print(f'Что-то пошло не так - {response.status}')
-
+            #logging.warning(f'Что-то пошло не так - {response.status}')
+            await bot.send_message(user_id, f'WARNING - Что-то пошло не так - {response.status}')
             return None
 
 
-async def get_new_reviews(startup_data):
+async def get_new_reviews(startup_data, user_id: str):
     review_list = []
     pagination_last_timestamp = 0
     pagination_last_uuid = None
     flag = True
     while flag:
         try:
-            reviews, pagination_last_timestamp, pagination_last_uuid = await pagination(startup_data, pagination_last_timestamp, pagination_last_uuid)
+            reviews, pagination_last_timestamp, pagination_last_uuid = await pagination(startup_data, user_id, pagination_last_timestamp, pagination_last_uuid)
             review_list.extend(reviews)
             if pagination_last_uuid == None:
                 flag = False
         except:
             break
     if len(review_list) > 0:
-        #await message.answer(f'INFO - Новых отзывов: {len(review_list)} шт.')
+        await bot.send_message(f'INFO - Новых отзывов: {len(review_list)} шт.')
         #logging.info(f'Новых отзывов: {len(review_list)} шт.')
         return review_list
     else:
-        #await message.answer(f'INFO - Новых отзывов нет.')
-        print(f'Новых отзывов нет.')
+        await bot.send_message(f'INFO - Новых отзывов нет.')
+        #logging.info(f'Новых отзывов нет.')
         return None
 
 
-async def get_all_reviews(startup_data):
+async def get_all_reviews(startup_data, user_id: str):
     url = 'https://seller.ozon.ru/api/v3/review/list'
     payload = json.dumps({
         "filter": {
@@ -90,15 +89,16 @@ async def get_all_reviews(startup_data):
             reviews = json_raw['result']
             try:
                 count_reviews = json_raw['counters']['PROCESSED']
-                print(f'Всего отзывов: {count_reviews} шт.')
-                #await message.answer(f'INFO - Всего отзывов: {count_reviews} шт.')
+                #logging.info(f'Всего отзывов: {count_reviews} шт.')
+                await bot.send_message(f'INFO - Всего отзывов: {count_reviews} шт.')
                 return reviews
             except:
-                print('Отзывов нет.')
-                #await message.answer('INFO - Отзывов нет.')
+                #logging.info('Отзывов нет.')
+                await bot.send_message('INFO - Отзывов нет.')
+                pass
         else:
-            print(f'Что-то пошло не так - {response.status}')
-            #await message.answer(f'WARNING - Что-то пошло не так - {response.status}')
+            #logging.warning(f'Что-то пошло не так - {response.status}')
+            await bot.send_message(f'WARNING - Что-то пошло не так - {response.status}')
             return None
 
 
@@ -139,36 +139,37 @@ async def reply_to_review(review, company_id, headers):
             await asyncio.sleep(random.randint(4, 7))
             response = await session.post(url=url, headers=headers, data=payload)
             if response.status == 200:
-                print(f'Отвечено на отзыв: {review.title}')
+                #logging.info(f'Отвечено на отзыв: {review.title}')
                 return True
             else:
-                print(f'Что-то пошло не так. Проблема с ответом на отзыв: {review.title}')
+                #logging.warning(f'Что-то пошло не так. Проблема с ответом на отзыв: {review.title}')
                 return False
     else:
         return False
 
 
-async def gather_data(reviews, startup_data):
+async def gather_data(reviews, startup_data, company_id):
     if reviews:
         for idx, review in enumerate(reviews):
             if await reply_to_review(review, company_id=startup_data['company_id'], headers=startup_data['headers']):
-                print(f'Отвечено на {idx+1}/{len(reviews)}')
+                #logging.info(f'Отвечено на {idx+1}/{len(reviews)}')
+                pass
             else:
                 continue
-    print(f'Процесс ответа на отзывы закончен.')
+    #logging.info(f'Процесс ответа на отзывы закончен.')
 
 
-async def generate_startup_data():
+async def generate_startup_data(company_id: str):
     group_value, access_token, refresh_token, user_id, cf_bm = await parse_cookies('ozon/db/cookies.json')
-    headers = await generate_headers(settings.TEST_COMPANY_ID, group_value, access_token, refresh_token, user_id, cf_bm)
+    headers = await generate_headers(company_id, group_value, access_token, refresh_token, user_id, cf_bm)
     data = {
-        'company_id': settings.TEST_COMPANY_ID,
+        'company_id': company_id,
         'headers': headers
     }
     return data
 
 
-async def get_new_reviews_bot():
+async def get_new_reviews_bot(user_id: str):
     startup_data = await generate_startup_data()
     reviews_raw = await get_new_reviews(startup_data)
     reviews_list = await parse_reviews(reviews_raw)
