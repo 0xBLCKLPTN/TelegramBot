@@ -2,21 +2,16 @@ name: AutoRelease
 
 on:
   push:
-    branches:
-      - main
-
+    tags:
+      - "v*"
+          
 jobs:
   release:
-    runs-on: ubuntu-latest
-    
+    name: "Release"
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
-      - uses: CupOfTea696/gh-action-auto-release@v1.0.0
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          title: "Release: $version"
-          tag: "v$semver"
-          draft: false
-          regex: "/^Release: #{semver}$/i"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+        
