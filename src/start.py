@@ -1,7 +1,7 @@
 from time import sleep
 
 
-#sleep(20)
+sleep(20)
 
 from dispatcher import *
 from keyboards.response import *
