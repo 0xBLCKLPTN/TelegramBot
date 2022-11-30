@@ -1,19 +1,9 @@
-name: Start Bot in docker-compose
-
-on: [push]
-
+name: docker-compose-actions-workflow
+on: push
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ["3.6", "3.7", "3.8"]
-    
     steps:
-      - name: Setting up docker-compose
-      - uses: hasnat/deploy-docker-compose@v0.1-alpha
-      - run: cd src && docker-compose --env-file .env
-      
-      
-      
-    
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: cd src && docker-compose --env-file .env
