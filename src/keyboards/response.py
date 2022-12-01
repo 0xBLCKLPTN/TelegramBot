@@ -8,6 +8,12 @@ from keyboards.admin_menu import *
 from utils import validator
 import core.config
 from keyboards.load_files import *
+import datetime
+from utils.ozon import refactor_logic
+import asyncio
+
+rf_class = refactor_logic.GetReviews()
+
 
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
@@ -28,6 +34,13 @@ async def process_start_command(message: types.Message):
 )
     ManageAdmins().add_admin(admin)
 """
+
+@dp.message_handler(commands=["run"])
+async def process_start_command(message: types.Message):
+    await message.reply('run!')
+    print('Here!')
+    await rf_class.get_new_reviews_bot(str(2020010618), str(129745))
+
 
 @dp.message_handler(text="Расценки", state="*")
 async def description(message: types.Message):

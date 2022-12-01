@@ -6,7 +6,7 @@ from utils import dataspace
 from utils.ozon import refactor_logic
 import asyncio
 
-rf_class = refactor_logic() # инициализация обьекта
+#rf_class = refactor_logic() # инициализация обьекта
 
 class Subscriber:
     def check(self):
@@ -16,7 +16,8 @@ class Subscriber:
             if payers != None:
                 for user in payers:
                     if user.last_buy > datetime.utcnow():
-                        asyncio.run(rf_class.get_new_reviews_bot(user.user_id))
+                        #asyncio.run(rf_class.get_new_reviews_bot(user.user_id))
+                        pass
                     else:
                         """
                         из user можно вытащить все атрибуты, которые есть в models/models.py/Users:
@@ -44,7 +45,7 @@ class BotTime:
     def check(self):
         while True:
             sleep(config.START_BOT)
-            print('DONE!')
+            
             
 
 def start_threads():

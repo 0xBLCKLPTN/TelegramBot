@@ -31,7 +31,7 @@ async def parse_cookies(cookies) -> tuple:
     cf_bm = ''
 
     if cookies:
-        with open(cookies) as file:
+        with open(cookies, 'r', encoding='utf-8') as file:
             json_raw = json.loads(file.read())
             for item in json_raw:
                 if item['name'] == '__Secure-ab-group':

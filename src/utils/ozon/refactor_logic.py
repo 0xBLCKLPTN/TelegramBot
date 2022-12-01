@@ -9,16 +9,16 @@ import json
 
 
 class GetReviews:
-    async def get_new_reviews_bot(self, user_id: str) -> None:
+    async def get_new_reviews_bot(self, user_id: str, company_id: str) -> None:
         '''
         Start function.
 
         Gets:
             - user_id: str for bot.send_message.
         '''
-        startup_data = await self.generate_startup_data(user_id)
-        reviews_raw = await self.get_new_reviews(user_id)
-        reviews_list = await self.parse_reviews(user_id, reviews_raw)
+        startup_data = await self.generate_startup_data(user_id, company_id)
+        reviews_raw = await self.get_new_reviews(user_id, startup_data)
+        reviews_list = await self.parse_reviews(reviews_raw)
         await self.gather_data(reviews_list, startup_data)
 
 
