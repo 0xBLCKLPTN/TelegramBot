@@ -20,9 +20,9 @@ class Review(Product):
         self.author_name = author_name
         self.uuid = uuid
 
-    async def generate_reply(self):
-        response_list = await read_json('utils/ozon/templates/positive_response_ozon.json')
-        goods_list = await read_json('utils/ozon/templates/ozon_goods.json')
+    async def generate_reply(self, user_positive: str, goodslist: str):
+        response_list = await read_json(goodslist)
+        goods_list = await read_json(user_positive)
         recommendation_code = None
 
         for i in goods_list:
