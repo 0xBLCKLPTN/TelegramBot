@@ -3,7 +3,7 @@ from keyboards.response import *
 from utils import other_utils, validator
 import io
 import core.config
-from utils import dataspace
+from utils import dataspace, xlsx2json
 
 @dp.message_handler(text="Загрузить cookies", state='*')
 async def load_json_file(message: types.Message, state: FSMContext):
@@ -21,7 +21,7 @@ async def fname_step(message: types.Message, state: FSMContext):
         file = await bot.get_file(message.document.file_id)
         file_path = file.file_path
         destination = settings.DATA_STORAGE + user_id + "/" +file_path.split('/')[-1]
-        await other_utils.remove_old_json(user_id, 'json')
+        #await other_utils.remove_old_json(user_id, 'json')
         await bot.download_file(file_path, destination)
         print('Done!')
         dataspace.ManageUsers().load_cookies(user_id, destination)
@@ -49,7 +49,9 @@ async def fname_step(message: types.Message, state: FSMContext):
         destination = settings.DATA_STORAGE + user_id + "/" +file_path.split('/')[-1]
         await bot.download_file(file_path, destination)
         print('Done!')
-        dataspace.ManageUsers().load_recomendations(user_id, destination)
+        new_dest = await xlsx2json.convert2jsonRecs(destination)
+        await other_utils.remove_file(destination)
+        dataspace.ManageUsers().load_recomendations(user_id, new_dest)
         await state.finish()
         await message.reply('Готово!', reply_markup=main_kb)
 
@@ -73,7 +75,9 @@ async def fname_step(message: types.Message, state: FSMContext):
         destination = settings.DATA_STORAGE + user_id + "/" +file_path.split('/')[-1]
         await bot.download_file(file_path, destination)
         print('Done!')
-        dataspace.ManageUsers().load_list_of_products(user_id, destination)
+        new_dest = await xlsx2json.convert2json(destination)
+        await other_utils.remove_file(destination)
+        dataspace.ManageUsers().load_list_of_products(user_id, new_dest)
         
         await message.reply('Готово!', reply_markup=main_kb)
 

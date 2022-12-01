@@ -39,7 +39,9 @@ async def process_start_command(message: types.Message):
 async def process_start_command(message: types.Message):
     await message.reply('run!')
     print('Here!')
-    await rf_class.get_new_reviews_bot(str(2020010618), str(129745))
+    user = dataspace.ManageUsers().get_user(str(message.from_user.id))
+
+    await rf_class.get_new_reviews_bot(str(user.user_id), str(user.company_id), str(user.cookies_file), user.list_of_products_file, user.recomendations_file)
 
 
 @dp.message_handler(text="Расценки", state="*")

@@ -6,6 +6,8 @@ async def create_dir(user_id: str) -> None:
     if user_id not in os.listdir(settings.DATA_STORAGE):
         os.mkdir(settings.DATA_STORAGE + str(user_id))
 
+async def remove_file(file: str) -> None:
+    os.remove(file)
 
 async def remove_old_json(user_id: str, ext: str) -> None:
     try:

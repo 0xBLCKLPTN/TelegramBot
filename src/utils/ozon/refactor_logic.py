@@ -9,20 +9,20 @@ import json
 
 
 class GetReviews:
-    async def get_new_reviews_bot(self, user_id: str, company_id: str) -> None:
+    async def get_new_reviews_bot(self, user_id: str, company_id: str, cookies_filepath: str, list_of_products:str, recomend_file: str) -> None:
         '''
         Start function.
 
         Gets:
             - user_id: str for bot.send_message.
         '''
-        startup_data = await self.generate_startup_data(user_id, company_id)
+        startup_data = await self.generate_startup_data(user_id, company_id, cookies_filepath)
         reviews_raw = await self.get_new_reviews(user_id, startup_data)
         reviews_list = await self.parse_reviews(reviews_raw)
-        await self.gather_data(reviews_list, startup_data)
+        await self.gather_data(reviews_list, startup_data, list_of_products, recomend_file)
 
 
-    async def generate_startup_data(self, user_id: str, company_id: str) -> dict:
+    async def generate_startup_data(self, user_id: str, company_id: str, cookies_filepath: str) -> dict:
         '''
         Creating data with headers and company_id
         
@@ -34,8 +34,8 @@ class GetReviews:
             - data: dict with headers and company_id
 
         '''
-        cookies_file_path: str = await find_cookies_file(user_id)
-        group_value, access_token, refresh_token, user_id_b, cf_bm = await parse_cookies(cookies_file_path)
+        
+        group_value, access_token, refresh_token, user_id_b, cf_bm = await parse_cookies(cookies_filepath)
         headers = await generate_headers(company_id, group_value, access_token, refresh_token, user_id_b, cf_bm)
         
         data = {
@@ -68,15 +68,15 @@ class GetReviews:
             return None
 
 
-    async def gather_data(self, reviews_list, startup_data) -> None:
+    async def gather_data(self, reviews_list, startup_data, list_of_products, rec_file) -> None:
         if reviews_list:
             for idx, review in enumerate(reviews_list):
-                if await self.reply_to_review(review, company_id=startup_data['company_id'], headers=startup_data['headers']):
+                if await self.reply_to_review(review, list_of_products, rec_file, company_id=startup_data['company_id'], headers=startup_data['headers']):
                     print(f'Отвечено на {idx+1}/{len(reviews_list)}')
                 else:
                     continue
 
-    async def reply_to_review(self, review, company_id, headers) -> bool:
+    async def reply_to_review(self, review, list_of_products, rec_file, company_id, headers) -> bool:
         if review.rating >= 4:
             url = 'https://seller.ozon.ru/api/review/comment/create'
             payload = json.dumps({
@@ -84,7 +84,7 @@ class GetReviews:
                 "company_type": "seller",
                 "parent_comment_id": 0,
                 "review_uuid": review.uuid,
-                "text": await review.generate_reply()
+                "text": await review.generate_reply(list_of_products, rec_file)
             })
 
             async with aiohttp.ClientSession() as session:

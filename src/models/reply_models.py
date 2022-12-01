@@ -20,20 +20,28 @@ class Review(Product):
         self.author_name = author_name
         self.uuid = uuid
 
-    async def generate_reply(self):
-        response_list = await read_json('utils/ozon/templates/positive_response_ozon.json')
-        goods_list = await read_json('utils/ozon/templates/ozon_goods.json')
+    async def generate_reply(self, user_positive: str, goodslist: str):
+        response_list = await read_json(goodslist)
+        goods_list = await read_json(user_positive)
         recommendation_code = None
 
         for i in goods_list:
-            ms_code: str = i['code_ms']
-            modification_code = ms_code.split('/')[0]
+            ms_code: str = str(i['code_ms'])
+            modification_code = str(ms_code.split('/')[0])
             if modification_code == self.offer_id:
-                recommendation_code = i['recommendation']
+                recommendation_code = str(i['recommendation'])
                 break
 
         if not recommendation_code:
             recommendation_code = '246088986, 459113390, 245959082'
+
+        nedable = {}
+        for i in response_list.keys():
+            nedable[i] = []
+            for j in response_list[i].keys():
+                nedable[i].append(response_list[i][j])
+        
+        response_list = nedable
 
         greetings_list = choice(response_list['greetings'])
         thanks_list = choice(response_list['thanks'])
