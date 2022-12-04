@@ -14,6 +14,8 @@ import asyncio
 
 rf_class = refactor_logic.GetReviews()
 
+config.loop = asyncio.get_event_loop()
+print(config.loop)
 
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
@@ -25,6 +27,7 @@ async def process_start_command(message: types.Message):
                 await message.reply("Привет!", reply_markup=main_kb)
             else: 
                 await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
+    
 
 """
 @dp.message_handler(commands=["add_admin"])

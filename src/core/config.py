@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     TEST_COMPANY_ID: str
 
 Bot_on = True  # The bot is run by defaultю
-START_LOOP = 20  # Subscription duration
-START_BOT = 10  # Every n times bot will stop
+START_LOOP = 200  # Subscription duration
+START_BOT = 200  # Every n times bot will stop
 
 settings = Settings()  # Initalizing this class object.

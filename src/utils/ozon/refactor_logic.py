@@ -16,6 +16,7 @@ class GetReviews:
         Gets:
             - user_id: str for bot.send_message.
         '''
+        print('Starting!')
         startup_data = await self.generate_startup_data(user_id, company_id, cookies_filepath)
         reviews_raw = await self.get_new_reviews(user_id, startup_data)
         reviews_list = await self.parse_reviews(reviews_raw)
@@ -34,7 +35,6 @@ class GetReviews:
             - data: dict with headers and company_id
 
         '''
-        
         group_value, access_token, refresh_token, user_id_b, cf_bm = await parse_cookies(cookies_filepath)
         headers = await generate_headers(company_id, group_value, access_token, refresh_token, user_id_b, cf_bm)
         
@@ -49,19 +49,20 @@ class GetReviews:
         review_list: list = []
         pagination_last_timestamp: int = 0
         pagination_last_uuid = None
-
         flag = True
 
         while flag:
             try:
                 reviews, pagination_last_timestamp, pagination_last_uuid = await self.pagination(startup_data, user_id, pagination_last_timestamp, pagination_last_uuid)
+                print(reviews, pagination_last_timestamp, pagination_last_uuid)
                 review_list.extend(reviews)
                 if pagination_last_uuid == None:
                     flag = False
-            except:
-                pass
+            except Exception as ex:
+                print(ex)
+        print('sending message!')
         if len(review_list) > 0:
-            await bot.send_message(user_id, f'INFO - Новых отзывов: {len(review_list)} шт.')
+            await bot.send_message('2020010618', f'INFO - Новых отзывов: {len(review_list)} шт.')
             return review_list
         else:
             await bot.send_message(user_id, f'INFO - Новых отзывов нет.')
