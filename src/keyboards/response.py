@@ -16,6 +16,8 @@ rf_class = refactor_logic.GetReviews()
 
 config.loop = asyncio.get_event_loop()
 print(config.loop)
+ManageAdmins().set_default_admin()
+
 
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
@@ -106,4 +108,7 @@ async def description(message: types.Message):
 @dp.message_handler(text="Вернуться", state='*')
 async def description(message: types.Message):
     if core.config.Bot_on:
-        await message.answer("Привет!",reply_markup=main_kb)
+        if dataspace.ManageUsers().check_user(message.from_user.id):
+            await message.answer("Привет!",reply_markup=main_kb)
+        else:
+            await message.answer("Привет! Тебе нужно зарегестрироваться",reply_markup=start_kb)

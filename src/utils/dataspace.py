@@ -6,6 +6,13 @@ from core import config
 session = db.create_database()
 
 class ManageAdmins:
+
+    def set_default_admin(self):
+        try:
+            qw = Admins(user_id = 123)
+            session.add(qw)
+        except:
+            pass
     def remove_admin(self, user_id: int):
         try:
             asd = session.query(Admins).filter(Admins.user_id == user_id).one()
