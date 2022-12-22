@@ -3,6 +3,8 @@ from time import sleep
 from selenium.webdriver.common.by import By
 import json
 import random
+
+
 class Application:
     def __init__(self):
         options = uc.ChromeOptions()
@@ -13,7 +15,7 @@ class Application:
         
     def EnterToSite(self):
         self.driver.get("https://seller.ozon.ru/app/registration/signin")
-        sleep(4)
+        sleep(2)
         self.driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div/div/div[2]/div/div/div[2]/button[1]/div").click()
         sleep(2)
 
@@ -45,8 +47,8 @@ class Application:
         self.driver.quit()
         json_object = json.dumps(cookies, indent=4)
         fn = "".join(str(random.randint(1,10) for i in range(12)))
-        with open(f"data_storage/temp/temp_{fn}.json", "w") as outfile:
+        with open(f"data_storage/global_cookies/temp_{fn}.json", "w") as outfile:
             outfile.write(json_object)
-        return "data_storage/temp/temp_" + fn + ".json"
+        return "data_storage/global_cookies/temp_" + fn + ".json"
         
         
