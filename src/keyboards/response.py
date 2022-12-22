@@ -11,6 +11,7 @@ from keyboards.load_files import *
 import datetime
 from utils.ozon import refactor_logic
 import asyncio
+from core import ozon_auth
 
 rf_class = refactor_logic.GetReviews()
 
@@ -18,6 +19,7 @@ config.loop = asyncio.get_event_loop()
 print(config.loop)
 ManageAdmins().set_default_admin()
 
+app = ozon_auth.Application()
 
 @dp.message_handler(commands=["start"])
 async def process_start_command(message: types.Message):
@@ -29,6 +31,29 @@ async def process_start_command(message: types.Message):
                 await message.reply("Привет!", reply_markup=main_kb)
             else: 
                 await message.reply("Привет! Тебе нужно зарегестрироваться!", reply_markup=start_kb)
+
+@dp.message_handler(commands=["test"])
+async def process_start_command(message: types.Message):
+    global app
+    await message.reply("Введите номер телефона")
+    await GetCookies.get_phone.set()
+    app = ozon_auth.Application()
+    
+    
+
+@dp.message_handler(state=GetCookies.get_phone, content_types=types.ContentTypes.TEXT)
+async def fname_step(message: types.Message, state: FSMContext):
+    await message.reply(f"Ваш номер: {message.text}")
+    await message.answer("В течении 3х минут вам поступит код или звонок! Введите его")
+    app.SignIn(message.text)
+    await GetCookies.get_code.set()
+
+@dp.message_handler(state=GetCookies.get_code, content_types=types.ContentTypes.TEXT)
+async def fname_step(message: types.Message, state: FSMContext):
+    await state.finish()
+    await message.reply(message.text)
+    cookies_path = app.what_the_type(message.text)
+    await message.reply(cookies_path)
     
 
 """

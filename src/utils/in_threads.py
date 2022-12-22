@@ -47,7 +47,7 @@ def start_threads():
     sc = Subscriber()
 
     th1 = Thread(target=sc.check)
-    th2 = Thread(target=start_async_func)
+    #th2 = Thread(target=start_async_func)
 
     th1.start()
-    th2.start()
+    #th2.start()

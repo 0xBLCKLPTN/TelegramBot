@@ -31,3 +31,7 @@ class StartBot(StatesGroup):
 class Payment(StatesGroup):
     qw = State()
     InputUserData = State()
+
+class GetCookies(StatesGroup):
+    get_phone = State()
+    get_code = State()
