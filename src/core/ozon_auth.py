@@ -10,7 +10,7 @@ class Application:
         options = uc.ChromeOptions()
         options.headless=True
         options.add_argument('--headless')
-        self.driver = uc.Chrome(executable_path="./usr/local/bin/chromedriver", options=options)
+        self.driver = uc.Chrome(executable_path="./chromedriver", options=options)
         self.EnterToSite()
         
     def EnterToSite(self):
